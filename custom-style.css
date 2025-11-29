@@ -37,7 +37,10 @@ window#waybar {
 #custom-update,
 #custom-screenrecording-indicator,
 #custom-system-monitor,
-#group-tray-expander {
+#group-tray-expander,
+#custom-expand-icon,
+#custom-arch,
+#custom-omarchy {
     /* Waybar's CSS doesn't support flexible layout properties like display:flex.
        Center icons using padding and alignment-friendly properties. */
     background: rgba(0, 0, 0, 0.7);
@@ -132,4 +135,22 @@ tooltip {
 tooltip label {
     color: #ffffff;
     background: transparent;
+}
+
+.hidden {
+    opacity: 0;
+}
+
+#custom-screenrecording-indicator.active {
+    color: #a55555;
+}
+
+#custom-system-monitor.warning {
+    background: rgba(255, 165, 0, 0.7);
+    border: 1px solid rgba(255, 165, 0, 0.6);
+}
+
+#custom-system-monitor.high {
+    background: rgba(255, 0, 0, 0.7);
+    border: 1px solid rgba(255, 0, 0, 0.6);
 }
