@@ -1,0 +1,33 @@
+
+add_newline = true
+command_timeout = 200
+format = "[$directory$git_branch$git_status]($style)$character"
+
+[character]
+error_symbol = "[✗](bold red)"
+success_symbol = "[❯](bold cyan)"
+
+[directory]
+truncation_length = 2
+truncation_symbol = "…/"
+repo_root_style = "bold cyan"
+repo_root_format = "[$repo_root]($repo_root_style)[$path]($style)[$read_only]($read_only_style) "
+
+[git_branch]
+format = "[$symbol $branch]($style) "
+style = "italic cyan"
+symbol = "⎇ "
+
+[git_status]
+format = "[$all_status$stashed]($style)"
+style = "cyan"
+ahead = "[↑$count](green) "
+behind = "[↓$count](red) "
+conflicted = "[✖$count](red) "
+untracked = "[?$count](yellow) "
+modified = "[~$count](orange) "
+deleted = "[-$count](red) "
+staged = "[+$count](green) "
+renamed = "[→$count](blue) "
+stashed = "[≡$count](magenta) "
+up_to_date = ""
