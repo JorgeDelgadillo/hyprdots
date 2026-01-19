@@ -37,6 +37,7 @@ function _run_pomo_timer() {
     local white="\e[97m"
     local purple="\e[38;5;99m"
     local reset="\e[0m"
+    local dark_blue="\e[38;5;12m"
     local dim="\e[2m"
 
     while true; do
@@ -58,8 +59,8 @@ function _run_pomo_timer() {
         clear
         echo -e "${green}$(date +"%H:%M:%S") → ${type_tag}${reset}"
         echo -e "${white}${fmt_end} - ${rem_m}m${rem_s}s${reset}"
-        
-        local bar_str="${purple}$(printf '█%.0s' $(seq 1 $filled))"
+
+        local bar_str="${dark_blue}$(printf '█%.0s' $(seq 1 $filled))"
         local space_str="${dim}$(printf '▒%.0s' $(seq 1 $empty))"
         echo -e "${bar_str}${space_str}${reset}   ${white}${percent}%${reset}"
         echo -e "\n${dim}Task: ${label}${reset}"
