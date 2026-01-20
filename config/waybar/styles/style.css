@@ -2,7 +2,7 @@
 
 * {
     all: unset;
-    font-family: 'JetBrainsMonoNL Nerd Font', sans-serif;
+    font-family: "JetBrainsMonoNL Nerd Font", sans-serif;
     font-size: 12px;
 }
 
@@ -105,7 +105,6 @@ window#waybar {
     all: unset;
     padding: 2px 6px;
     margin: 0 1px;
-    background: rgba(255, 255, 255, 0.1);
     border-radius: 12px;
     color: #ffffff;
     min-width: 16px;
@@ -113,6 +112,8 @@ window#waybar {
 
 #workspaces button.active {
     background: rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.3);
     color: #ffffff;
     font-weight: bold;
 }
