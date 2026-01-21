@@ -1,18 +1,13 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-function pomo() {
+# This works in both Bash and Zsh
+pomo() {
     local work_min=${1:-25}
     local break_min=${2:-5}
     local task_msg="${3:-Work Session}"
 
-    local green="\e[32m"
-    local white="\e[97m"
-    local purple="\e[38;5;99m"
-    local reset="\e[0m"
-    local dim="\e[2m"
-
     tput civis
-    trap "tput cnorm; exit" SIGINT
+    trap "tput cnorm; return" SIGINT 2>/dev/null || trap "tput cnorm; exit" SIGINT
 
     while true; do
         _run_pomo_timer "$work_min" "$task_msg" "pom"
@@ -23,7 +18,7 @@ function pomo() {
     done
 }
 
-function _run_pomo_timer() {
+_run_pomo_timer() {
     local duration_min=$1
     local label=$2
     local type_tag=$3
@@ -31,14 +26,15 @@ function _run_pomo_timer() {
     local total_sec=$((duration_min * 60))
     local start_time=$(date +%s)
     local end_time=$((start_time + total_sec))
-    local fmt_end=$(date -d "@$end_time" +"%I:%M%p")
+    # Note: 'date -d' is GNU specific (Linux). For macOS/BSD, use: date -r $end_time
+    local fmt_end=$(date -d "@$end_time" +"%I:%M%p" 2>/dev/null || date -r "$end_time" +"%I:%M%p")
 
-    local green="\e[32m"
-    local white="\e[97m"
-    local purple="\e[38;5;99m"
-    local reset="\e[0m"
-    local dark_blue="\e[38;5;12m"
-    local dim="\e[2m"
+    local green="\033[32m"
+    local white="\033[97m"
+    local purple="\033[38;5;99m"
+    local reset="\033[0m"
+    local dark_blue="\033[38;5;12m"
+    local dim="\033[2m"
 
     while true; do
         local now=$(date +%s)
@@ -55,15 +51,19 @@ function _run_pomo_timer() {
         local rem_m=$((remaining / 60))
         local rem_s=$((remaining % 60))
 
-        # Redraw UI without flickering
+        # Redraw UI
         clear
-        echo -e "${green}$(date +"%H:%M:%S") → ${type_tag}${reset}"
-        echo -e "${white}${fmt_end} - ${rem_m}m${rem_s}s${reset}"
+        printf "${purple}%s → %s${reset}\n" "$(date +"%H:%M:%S")" "$type_tag"
+        printf "${white}%s - %sm%ss${reset}\n" "$fmt_end" "$rem_m" "$rem_s"
 
-        local bar_str="${dark_blue}$(printf '█%.0s' $(seq 1 $filled))"
-        local space_str="${dim}$(printf '▒%.0s' $(seq 1 $empty))"
-        echo -e "${bar_str}${space_str}${reset}   ${white}${percent}%${reset}"
-        echo -e "\n${dim}Task: ${label}${reset}"
+        # Generate progress bar compatibly
+        local bar_str=""
+        local space_str=""
+        for i in $(seq 1 $filled 2>/dev/null || echo {1..$filled}); do [ $filled -gt 0 ] && bar_str="${bar_str}█"; done
+        for i in $(seq 1 $empty 2>/dev/null || echo {1..$empty}); do [ $empty -gt 0 ] && space_str="${space_str}▒"; done
+
+        printf "${dark_blue}%s${dim}%s${reset}   ${white}%d%%${reset}\n" "$bar_str" "$space_str" "$percent"
+        printf "\n${dim}Task: %s${reset}\n" "$label"
 
         sleep 1
     done
