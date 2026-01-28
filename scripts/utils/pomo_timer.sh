@@ -36,6 +36,9 @@ _run_pomo_timer() {
     local dark_blue="\033[38;5;12m"
     local dim="\033[2m"
 
+    # Clear screen once at the start
+    printf "\033[2J\033[H"
+
     while true; do
         local now=$(date +%s)
         local elapsed=$((now - start_time))
@@ -51,8 +54,8 @@ _run_pomo_timer() {
         local rem_m=$((remaining / 60))
         local rem_s=$((remaining % 60))
 
-        # Redraw UI
-        clear
+        # Move cursor to home position and redraw UI
+        printf "\033[H"
         printf "${purple}%s → %s${reset}\n" "$(date +"%H:%M:%S")" "$type_tag"
         printf "${white}%s - %sm%ss${reset}\n" "$fmt_end" "$rem_m" "$rem_s"
 
